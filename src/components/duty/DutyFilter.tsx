@@ -8,7 +8,7 @@ export const DutyFilter = () => {
   /** @todo loading, error 처리 */
   const { data: duties = [] } = useDutiesQuery();
 
-  const firstDepthDuties = useMemo(
+  const topLevelDuties = useMemo(
     () => duties.filter(duty => duty.parent_id === null),
     [duties]
   );
@@ -32,38 +32,41 @@ export const DutyFilter = () => {
 
   /* -------------------------------------------------------------------------- */
 
-  const [selectedDutyIdsInDepthOrder, setSelectedDutyIdsInDepthOrder] =
-    useState<Duty['id'][]>([]);
+  /** index는 filter의 level/depth를 의미합니다 */
+  const [selectedDutyIds, setSelectedDutyIds] = useState<Duty['id'][]>([]);
 
-  const handleToggleSelect = useCallback(
+  const handleToggleDutySelection = useCallback(
     ({
-      duty: newDuty,
+      duty: newSelectedDuty,
       isChecked: isSelected,
     }: {
       duty: Duty;
       isChecked: boolean;
     }) => {
       /** @todo 리팩터링 */
-      setSelectedDutyIdsInDepthOrder(prev => {
-        const isFirstDepthDuty = newDuty.parent_id === null;
-        if (isFirstDepthDuty) {
+      setSelectedDutyIds(prev => {
+        const isTopLevelDuty = newSelectedDuty.parent_id === null;
+        if (isTopLevelDuty) {
           if (isSelected) {
-            return [newDuty.id];
+            return [newSelectedDuty.id];
           }
           return [];
         }
 
-        const parentDepthIndex = prev.findIndex(id => id === newDuty.parent_id);
-        if (parentDepthIndex === -1) return prev;
+        const parentIndex = prev.findIndex(
+          id => id === newSelectedDuty.parent_id
+        );
+        if (parentIndex === -1) return prev;
 
-        const newDutyDepthIndex = parentDepthIndex + 1;
+        const newDutyDepthIndex = parentIndex + 1;
         const next = [...prev];
 
         if (isSelected) {
-          const isAlreadySelected = prev[newDutyDepthIndex] === newDuty.id;
+          const isAlreadySelected =
+            prev[newDutyDepthIndex] === newSelectedDuty.id;
           if (isAlreadySelected) return prev;
 
-          next[newDutyDepthIndex] = newDuty.id;
+          next[newDutyDepthIndex] = newSelectedDuty.id;
         } else {
           next.splice(newDutyDepthIndex);
         }
@@ -86,18 +89,18 @@ export const DutyFilter = () => {
       {/* @todo section layout 컴포넌트로 추출 */}
       {/* @todo width관련해서 좀 더 flexible하게 가져갈 수 있는 방법 없는지 고민해보기 */}
       <Flex flexDir={'column'} gap={3} px={4} py={4} bg={'white'} w={'340px'}>
-        {firstDepthDuties.map(duty => (
+        {topLevelDuties.map(duty => (
           <DutyFilterOption
             key={duty.id}
             duty={duty}
             hasChildrenFilter={!!parentDutyMap[duty.id]}
-            isChecked={selectedDutyIdsInDepthOrder[0] === duty.id}
-            onChange={handleToggleSelect}
+            isChecked={selectedDutyIds[0] === duty.id}
+            onChange={handleToggleDutySelection}
           />
         ))}
       </Flex>
 
-      {selectedDutyIdsInDepthOrder.map((parentDutyId, index) => {
+      {selectedDutyIds.map((parentDutyId, depthIndex) => {
         if (!parentDutyId) return null;
 
         const childrenDuties = duties.filter(
@@ -108,7 +111,7 @@ export const DutyFilter = () => {
 
         return (
           <Flex
-            key={`depth-${index + 1}`}
+            key={`filter-level-${depthIndex + 1}`}
             flexDir={'column'}
             gap={3}
             px={4}
@@ -123,8 +126,8 @@ export const DutyFilter = () => {
                   key={duty.id}
                   duty={duty}
                   hasChildrenFilter={!!parentDutyMap[duty.id]}
-                  isChecked={selectedDutyIdsInDepthOrder[index + 1] === duty.id}
-                  onChange={handleToggleSelect}
+                  isChecked={selectedDutyIds[depthIndex + 1] === duty.id}
+                  onChange={handleToggleDutySelection}
                 />
               ))}
           </Flex>
