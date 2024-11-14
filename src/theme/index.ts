@@ -1,4 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
+import { checkboxTheme } from './components/Checkbox';
 
 const resetStyles = {
   '*': {
@@ -33,4 +34,7 @@ const resetStyles = {
 
 export default extendTheme({
   styles: resetStyles,
+  components: {
+    Checkbox: checkboxTheme,
+  },
 });
