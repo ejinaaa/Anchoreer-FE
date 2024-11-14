@@ -13,7 +13,8 @@ export const DutyFilter = () => {
     [allDuties]
   );
 
-  const parentDutyMap = useMemo(
+  /** 특정 duty에 대한 하위 duty를 조회할 수 있습니다 */
+  const dutyChildrenMap = useMemo(
     () =>
       /** @todo 서비스함수 추출 */
       allDuties.reduce((acc, duty) => {
@@ -80,8 +81,8 @@ export const DutyFilter = () => {
   /* -------------------------------------------------------------------------- */
 
   const hasChildrenFilter = useCallback(
-    (dutyId: Duty['id']) => !!parentDutyMap[dutyId],
-    [parentDutyMap]
+    (dutyId: Duty['id']) => !!dutyChildrenMap[dutyId],
+    [dutyChildrenMap]
   );
 
   return (
