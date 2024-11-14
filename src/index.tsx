@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider value={theme}>
+      <ChakraProvider theme={theme}>
         <App />
       </ChakraProvider>
     </QueryClientProvider>

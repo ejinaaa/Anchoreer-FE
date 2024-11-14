@@ -1,4 +1,4 @@
-import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 
 const resetStyles = {
   '*': {
@@ -31,8 +31,6 @@ const resetStyles = {
   },
 };
 
-const customConfig = defineConfig({
-  globalCss: resetStyles,
+export default extendTheme({
+  styles: resetStyles,
 });
-
-export default createSystem(defaultConfig, customConfig);
