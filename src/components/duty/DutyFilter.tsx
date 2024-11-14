@@ -2,21 +2,21 @@ import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useDutiesQuery } from '../../hooks/duty/useDutiesQuery';
 import { Duty } from '../../types/duty';
-import { DutyFilterOption } from './DutyFilterOption';
+import { DutyFilterGroup } from './DutyFilterGroup';
 
 export const DutyFilter = () => {
   /** @todo loading, error 처리 */
-  const { data: duties = [] } = useDutiesQuery();
+  const { data: allDuties = [] } = useDutiesQuery();
 
   const topLevelDuties = useMemo(
-    () => duties.filter(duty => duty.parent_id === null),
-    [duties]
+    () => allDuties.filter(duty => duty.parent_id === null),
+    [allDuties]
   );
 
   const parentDutyMap = useMemo(
     () =>
       /** @todo 서비스함수 추출 */
-      duties.reduce((acc, duty) => {
+      allDuties.reduce((acc, duty) => {
         if (duty.parent_id === null) return acc;
 
         if (!acc[duty.parent_id]) {
@@ -27,7 +27,7 @@ export const DutyFilter = () => {
 
         return acc;
       }, {} as Record<Duty['id'], Duty[]>),
-    [duties]
+    [allDuties]
   );
 
   /* -------------------------------------------------------------------------- */
@@ -77,6 +77,13 @@ export const DutyFilter = () => {
     []
   );
 
+  /* -------------------------------------------------------------------------- */
+
+  const hasChildrenFilter = useCallback(
+    (dutyId: Duty['id']) => !!parentDutyMap[dutyId],
+    [parentDutyMap]
+  );
+
   return (
     <Flex
       gap={1}
@@ -86,51 +93,28 @@ export const DutyFilter = () => {
       overflow={'hidden'}
       w={'full'}
     >
-      {/* @todo section layout 컴포넌트로 추출 */}
-      {/* @todo width관련해서 좀 더 flexible하게 가져갈 수 있는 방법 없는지 고민해보기 */}
-      <Flex flexDir={'column'} gap={3} px={4} py={4} bg={'white'} w={'340px'}>
-        {topLevelDuties.map(duty => (
-          <DutyFilterOption
-            key={duty.id}
-            duty={duty}
-            hasChildrenFilter={!!parentDutyMap[duty.id]}
-            isChecked={selectedDutyIds[0] === duty.id}
-            onChange={handleToggleDutySelection}
-          />
-        ))}
-      </Flex>
+      <DutyFilterGroup
+        duties={topLevelDuties}
+        selectedDutyIds={selectedDutyIds[0]}
+        onChange={handleToggleDutySelection}
+        hasChildrenFilter={hasChildrenFilter}
+      />
 
-      {selectedDutyIds.map((parentDutyId, depthIndex) => {
+      {selectedDutyIds.map((parentDutyId, parentLevelIndex) => {
         if (!parentDutyId) return null;
 
-        const childrenDuties = duties.filter(
+        const groupedDuties = allDuties.filter(
           duty => duty.parent_id === parentDutyId
         );
 
-        if (childrenDuties.length === 0) return null;
-
         return (
-          <Flex
-            key={`filter-level-${depthIndex + 1}`}
-            flexDir={'column'}
-            gap={3}
-            px={4}
-            py={4}
-            bg={'white'}
-            w={'340px'}
-          >
-            {duties
-              .filter(duty => duty.parent_id === parentDutyId)
-              .map(duty => (
-                <DutyFilterOption
-                  key={duty.id}
-                  duty={duty}
-                  hasChildrenFilter={!!parentDutyMap[duty.id]}
-                  isChecked={selectedDutyIds[depthIndex + 1] === duty.id}
-                  onChange={handleToggleDutySelection}
-                />
-              ))}
-          </Flex>
+          <DutyFilterGroup
+            key={`filter-level-${parentLevelIndex + 1}`}
+            duties={groupedDuties}
+            selectedDutyIds={selectedDutyIds[parentLevelIndex + 1]}
+            onChange={handleToggleDutySelection}
+            hasChildrenFilter={hasChildrenFilter}
+          />
         );
       })}
     </Flex>
