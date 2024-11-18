@@ -1,3 +1,4 @@
+/** 0 ~ 6. 0은 일요일, 6은 토요일 */
 export enum Weekday {
   Sunday = 0,
   Monday = 1,
@@ -8,7 +9,8 @@ export enum Weekday {
   Saturday = 6,
 }
 
-export enum Month {
+/** 0 ~ 11. 0은 1월, 11은 12월 */
+export enum MonthIndex {
   January = 0,
   February = 1,
   March = 2,
@@ -21,4 +23,19 @@ export enum Month {
   October = 9,
   November = 10,
   December = 11,
+}
+
+export enum Month {
+  January = 1,
+  February = 2,
+  March = 3,
+  April = 4,
+  May = 5,
+  June = 6,
+  July = 7,
+  August = 8,
+  September = 9,
+  October = 10,
+  November = 11,
+  December = 12,
 }
