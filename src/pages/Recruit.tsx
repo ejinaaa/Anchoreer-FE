@@ -4,7 +4,7 @@ import { RecruitCalendar } from '../components/recruit/RecruitCalendar';
 
 export const Recruit = () => {
   return (
-    <Flex>
+    <Flex flexDir={'column'}>
       <DutyFilter />
 
       <RecruitCalendar />
