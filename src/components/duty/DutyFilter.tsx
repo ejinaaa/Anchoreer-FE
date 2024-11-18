@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useDutiesQuery } from '../../hooks/duty/useDutiesQuery';
+import { updateSelectedDutyIds } from '../../service/duty';
 import { Duty } from '../../types/duty';
 import { DutyFilterGroup } from './DutyFilterGroup';
 
@@ -39,7 +40,7 @@ export const DutyFilter = () => {
   const handleToggleDutySelection = useCallback(
     ({
       duty: newSelectedDuty,
-      isChecked: isSelected,
+      isChecked,
     }: {
       duty: Duty;
       isChecked: boolean;
@@ -48,10 +49,7 @@ export const DutyFilter = () => {
       setSelectedDutyIds(prev => {
         const isTopLevelDuty = newSelectedDuty.parent_id === null;
         if (isTopLevelDuty) {
-          if (isSelected) {
-            return [newSelectedDuty.id];
-          }
-          return [];
+          return isChecked ? [newSelectedDuty.id] : [];
         }
 
         const parentIndex = prev.findIndex(
@@ -59,20 +57,12 @@ export const DutyFilter = () => {
         );
         if (parentIndex === -1) return prev;
 
-        const newDutyDepthIndex = parentIndex + 1;
-        const next = [...prev];
-
-        if (isSelected) {
-          const isAlreadySelected =
-            prev[newDutyDepthIndex] === newSelectedDuty.id;
-          if (isAlreadySelected) return prev;
-
-          next[newDutyDepthIndex] = newSelectedDuty.id;
-        } else {
-          next.splice(newDutyDepthIndex);
-        }
-
-        return next;
+        return updateSelectedDutyIds({
+          selectedDutyIds: prev,
+          newDutyId: newSelectedDuty.id,
+          newDutyLevel: parentIndex + 1,
+          isSelected: isChecked,
+        });
       });
     },
     []
