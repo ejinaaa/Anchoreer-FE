@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecruitsQuery } from '../../hooks/recruit/useRecruitsQuery';
 import { convertToDateObject } from '../../service/recruit';
 import { Month } from '../../types/common';
@@ -8,34 +8,33 @@ import { CalendarNavigation } from '../common/CalendarNavigation';
 export const RecruitCalendar = () => {
   const { data: recruits } = useRecruitsQuery();
 
-  useEffect(() => {
-    console.log('recruits: ', recruits);
-  }, [recruits]);
-
   /* -------------------------------------------------------------------------- */
 
   const [selectedDate, setSelectedDate] = useState<{
     year: number;
     month: Month;
+    date: number;
   }>(convertToDateObject(new Date()));
 
   const handleMoveToLastMonth = () => {
-    setSelectedDate(prev => {
-      const lastMonth = prev.month - 1;
+    setSelectedDate(prevState => {
+      const lastMonth = prevState.month - 1;
       const isYearDecrementNeeded = lastMonth < Month.January;
       return {
-        year: isYearDecrementNeeded ? prev.year - 1 : prev.year,
+        ...prevState,
+        year: isYearDecrementNeeded ? prevState.year - 1 : prevState.year,
         month: isYearDecrementNeeded ? Month.December : lastMonth,
       };
     });
   };
 
   const handleMoveToNextMonth = () => {
-    setSelectedDate(prev => {
-      const nextMonth = prev.month + 1;
+    setSelectedDate(prevState => {
+      const nextMonth = prevState.month + 1;
       const isYearIncrementNeeded = nextMonth > Month.December;
       return {
-        year: isYearIncrementNeeded ? prev.year + 1 : prev.year,
+        ...prevState,
+        year: isYearIncrementNeeded ? prevState.year + 1 : prevState.year,
         month: isYearIncrementNeeded ? Month.January : nextMonth,
       };
     });
