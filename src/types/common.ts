@@ -1,5 +1,5 @@
 /** 0 ~ 6. 0은 일요일, 6은 토요일 */
-export enum Weekday {
+export enum WeekdayIndex {
   Sunday = 0,
   Monday = 1,
   Tuesday = 2,
@@ -39,3 +39,9 @@ export enum Month {
   November = 11,
   December = 12,
 }
+
+export type DateObject = {
+  year: number;
+  month: Month;
+  date: number;
+};
