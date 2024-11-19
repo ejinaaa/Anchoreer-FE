@@ -1,46 +1,37 @@
-# Getting Started with Create React App
+### 실행 방법
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. npm install을 통해 패키지를 설치합니다.
+2. npm start를 통해 프로젝트를 실행합니다.
 
-## Available Scripts
+### 기술 스택
 
-In the project directory, you can run:
+편안한 환경에서 빠르게 개발 가능한 것을 목표로 두고 선정하였습니다.
 
-### `npm start`
+- React
+- React Query
+- Chakra ui
+- Axios
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 요구사항 및 개발 여부
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- _월 네비게이션 구현_
+  - [x] 달력 상단에 현재 월 표시와 함께 이전 월, 다음 월로 이동할 수 있는 버튼을 제공합니다.
+  - [x] 이전 월 또는 이후 월 버튼 클릭 시 해당 월의 달력을 새로고침 없이 업데이트하여 표시합니다.
+- _달력 구현_
+  - [x] 처음 페이지에 접속하면 오늘이 속한 월의 달력이 표시됩니다.
+  - [x] 첫 행은 일/월/화/수/목/금/토 순으로 요일을 표시합니다.
+  - [x] 달력의 각 칸은 일자가 표시되는 헤더와 해당 일자에 시작 또는 마감하는 공고의 기업명 목록이 표시되는 바디로 구성됩니다.
+    - [x] 공고 시작일자의 경우 ‘시’, 마감일자의 경우 ‘끝’이 표시됩니다.
+    - [] 목록에서 시작 일자가 먼저 표시되고, 마감 일자는 그 다음 표시됩니다.
+    - [x] 달력의 첫 날은 1일이 포함되는 주의 일요일입니다.
+    - [x] 달력의 마지막 날은 마지막 날이 포함되는 주의 토요일입니다.
+    - [] 확인한 공고는 달력에서 기업명의 색깔이 흐리게 표현됩니다.
+- 직무 필터
+  - [x] 직무 목록 Api에서 직무 목록을 받아와서 직무를 계층 구조로 checkbox와 함께 직무명을 노출합니다.
+  - [] 각 직무 선택 시, 채용 달력의 공고 중 duty_ids에 id를 가지고 있는 기업들만 필터 됩니다.
+  - [] 상위 계층을 선택 시 해당 상위 계층의 모든 하위 직무가 선택됩니다. 필터 역시, 모든 하위 직무의 id를 가진 공고만 필터 됩니다.
+- 채용 공고 상세보기
+  - [x] 달력의 각 칸의 공고 목록에서 공고를 누르면 공고의 자세한 정보를 볼 수 있는 모달이 노출됩니다.
+  - [x] 모달에는 해당 공고의 기업명, 제목, 직무, 채용 공고의 시작일, 마감일, 채용 공고 이미지가 노출됩니다.
+  - [] 이전 공고와 이후 공고로 이동할 수 있는 버튼이 있으며, 버튼 클릭 시 이전 공고, 이후 공고로 이동이 가능합니다.
+    - [] 직무 필터가 설정 되어 있다면 직무로 필터된 데이터 기준으로 이전/이후 이동이 됩니다.
