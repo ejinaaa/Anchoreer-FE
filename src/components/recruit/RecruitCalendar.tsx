@@ -84,8 +84,6 @@ export const RecruitCalendar = () => {
   const [selectedRecruit, setSelectedRecruit] = useState<Recruit | null>(null);
 
   const handleSeeRecruitDetail = (recruit: Recruit) => {
-    /** @todo open detail (kind of) modal */
-    console.log('recruit:', recruit);
     setSelectedRecruit(recruit);
   };
 
