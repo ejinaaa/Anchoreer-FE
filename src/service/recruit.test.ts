@@ -1,7 +1,19 @@
 import { DateObject, Month } from '../types/common';
-import { getDateObjectsOfMonth } from './recruit';
+import {
+  convertDateStringToDateKey,
+  convertToDateObject,
+  getDateObjectsOfMonth,
+} from './recruit';
 
 describe('Recruit Service', () => {
+  describe('convertToDateObject', () => {
+    it('should return correct date object', () => {
+      const expected = { year: 2024, month: Month.November, date: 1 };
+      const result = convertToDateObject(new Date('2024-11-01'));
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('getDateObjectsOfMonth', () => {
     it('should return correct date objects for November 2024', () => {
       const expected: DateObject[] = [
@@ -130,6 +142,18 @@ describe('Recruit Service', () => {
 
       const result = getDateObjectsOfMonth(2024, Month.December);
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('convertDateStringToDateKey', () => {
+    it('should return correct date key for 2024-11-01', () => {
+      const result = convertDateStringToDateKey('2024-11-01 23:59:59');
+      expect(result).toEqual('2024-11-1');
+    });
+
+    it('should return undefined for invalid date string', () => {
+      const result = convertDateStringToDateKey('invalid-date-string');
+      expect(result).toBeUndefined();
     });
   });
 });
