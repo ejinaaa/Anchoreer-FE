@@ -45,3 +45,5 @@ export type DateObject = {
   month: Month;
   date: number;
 };
+
+export type DateKey = `${number}-${number}-${number}`;

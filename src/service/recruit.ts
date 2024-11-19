@@ -2,7 +2,13 @@ import {
   monthIndexToDisplayNumberMap,
   monthToIndexMap,
 } from '../constants/common';
-import { DateObject, Month, MonthIndex, WeekdayIndex } from '../types/common';
+import {
+  DateKey,
+  DateObject,
+  Month,
+  MonthIndex,
+  WeekdayIndex,
+} from '../types/common';
 
 export const convertToDateObject = (
   date: Date
@@ -63,7 +69,7 @@ export const isToday = (date: DateObject): boolean => {
 
 export const convertDateStringToDateKey = (
   dateString: string
-): `${string}-${string}-${string}` | undefined => {
+): DateKey | undefined => {
   const date = new Date(dateString);
 
   const isInvalidDate = isNaN(date.getTime());
@@ -79,9 +85,7 @@ export const convertDateStringToDateKey = (
   return `${year}-${month}-${day}`;
 };
 
-export const convertDateObjectToDateKey = (
-  date: DateObject
-): `${string}-${string}-${string}` => {
+export const convertDateObjectToDateKey = (date: DateObject): DateKey => {
   return `${date.year}-${date.month}-${date.date}`;
 };
 
