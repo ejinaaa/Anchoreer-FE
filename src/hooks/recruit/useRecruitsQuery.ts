@@ -29,19 +29,24 @@ export const selectRecruitMapByDate = (res: FetchRecruitsApiResponse) => {
     const startDate = convertDateStringToDateKey(recruit.start_time);
     const endDate = convertDateStringToDateKey(recruit.end_time);
 
-    const hasStartDate = recruitMapByDate[startDate];
-    const hasEndDate = recruitMapByDate[endDate];
+    if (startDate) {
+      const hasStartDate = recruitMapByDate[startDate];
 
-    if (hasStartDate) {
-      recruitMapByDate[startDate].push(recruit);
-    } else {
-      recruitMapByDate[startDate] = [recruit];
+      if (hasStartDate) {
+        recruitMapByDate[startDate].push(recruit);
+      } else {
+        recruitMapByDate[startDate] = [recruit];
+      }
     }
 
-    if (hasEndDate) {
-      recruitMapByDate[endDate].push(recruit);
-    } else {
-      recruitMapByDate[endDate] = [recruit];
+    if (endDate) {
+      const hasEndDate = recruitMapByDate[endDate];
+
+      if (hasEndDate) {
+        recruitMapByDate[endDate].push(recruit);
+      } else {
+        recruitMapByDate[endDate] = [recruit];
+      }
     }
   });
 

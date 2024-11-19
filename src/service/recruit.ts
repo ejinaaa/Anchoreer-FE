@@ -63,9 +63,20 @@ export const isToday = (date: DateObject): boolean => {
 
 export const convertDateStringToDateKey = (
   dateString: string
-): `${string}-${string}-${string}` => {
+): `${string}-${string}-${string}` | undefined => {
   const date = new Date(dateString);
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+  const isInvalidDate = isNaN(date.getTime());
+  if (isInvalidDate) return;
+
+  const year = date.getFullYear();
+
+  const monthIndex: MonthIndex = date.getMonth();
+  const month = monthIndexToDisplayNumberMap[monthIndex];
+
+  const day = date.getDate();
+
+  return `${year}-${month}-${day}`;
 };
 
 export const convertDateObjectToDateKey = (
