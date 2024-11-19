@@ -2,6 +2,7 @@ import { DateObject, Month } from '../types/common';
 import {
   convertDateStringToDateKey,
   convertToDateObject,
+  formatDateStringForDisplay,
   getDateObjectsOfMonth,
 } from './recruit';
 
@@ -154,6 +155,18 @@ describe('Recruit Service', () => {
     it('should return undefined for invalid date string', () => {
       const result = convertDateStringToDateKey('invalid-date-string');
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('formatDateStringForDisplay', () => {
+    it('should return correct date string for 2024-11-01', () => {
+      const result = formatDateStringForDisplay('2024-11-01');
+      expect(result).toEqual('2024년 11월 1일');
+    });
+
+    it('should return empty string for invalid date string', () => {
+      const result = formatDateStringForDisplay('invalid-date-string');
+      expect(result).toEqual('');
     });
   });
 });

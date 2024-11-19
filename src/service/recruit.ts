@@ -84,3 +84,19 @@ export const convertDateObjectToDateKey = (
 ): `${string}-${string}-${string}` => {
   return `${date.year}-${date.month}-${date.date}`;
 };
+
+export const formatDateStringForDisplay = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  const isInvalidDate = isNaN(date.getTime());
+  if (isInvalidDate) return '';
+
+  const year = date.getFullYear();
+
+  const monthIndex: MonthIndex = date.getMonth();
+  const month = monthIndexToDisplayNumberMap[monthIndex];
+
+  const day = date.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
+};
