@@ -45,7 +45,7 @@ export const RecruitDetailModal: React.FC<RecruitDetailModalProps> = ({
               {recruit.title}
             </Text>
             {hasAnyDate && (
-              <Text fontSize={'xs'} color={'blackAlpha.500'}>
+              <Text fontSize={'sm'} color={'blackAlpha.500'}>
                 {startDate} ~ {endDate}
               </Text>
             )}
