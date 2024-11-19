@@ -66,3 +66,16 @@ export const isToday = (date: DateObject): boolean => {
     date.date === today.date
   );
 };
+
+export const convertDateStringToDateKey = (
+  dateString: string
+): `${string}-${string}-${string}` => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};
+
+export const convertDateObjectToDateKey = (
+  date: DateObject
+): `${string}-${string}-${string}` => {
+  return `${date.year}-${date.month}-${date.date}`;
+};

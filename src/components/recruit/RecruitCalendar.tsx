@@ -1,7 +1,10 @@
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import { weekdaysIndex } from '../../constants/common';
-import { useRecruitsQuery } from '../../hooks/recruit/useRecruitsQuery';
+import {
+  selectRecruitMapByDate,
+  useRecruitsQuery,
+} from '../../hooks/recruit/useRecruitsQuery';
 import {
   convertToDateObject,
   getDateObjectsOfMonth,
@@ -13,7 +16,9 @@ import { CalendarNavigation } from '../common/CalendarNavigation';
 import { CalendarWeekdayCell } from '../common/CalendarWeekdayCell';
 
 export const RecruitCalendar = () => {
-  const { data: recruits } = useRecruitsQuery();
+  const { data: recruitMapByDate } = useRecruitsQuery({
+    select: selectRecruitMapByDate,
+  });
 
   /* -------------------------------------------------------------------------- */
 
