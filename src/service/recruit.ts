@@ -18,11 +18,8 @@ export const convertToDateObject = (
 
 export const getDateObjectsOfMonth = (
   year: number,
-  month: Month,
-  option?: { startFromSunday?: boolean }
+  month: Month
 ): DateObject[] => {
-  const { startFromSunday = true } = option || {};
-
   const dates: DateObject[] = [];
 
   const startDate = new Date(year, monthToIndexMap[month], 1);
@@ -31,12 +28,9 @@ export const getDateObjectsOfMonth = (
   const startDayIndex = startDate.getDay();
   const endDayIndex = endDate.getDay();
 
-  const dayOffset = startFromSunday ? WeekdayIndex.Sunday : WeekdayIndex.Monday;
-  startDate.setDate(1 - startDayIndex + dayOffset);
+  startDate.setDate(1 - startDayIndex);
 
-  endDate.setDate(
-    endDate.getDate() + (WeekdayIndex.Saturday - endDayIndex) + dayOffset
-  );
+  endDate.setDate(endDate.getDate() + (WeekdayIndex.Saturday - endDayIndex));
 
   /* -------------------------------------------------------------------------- */
 
