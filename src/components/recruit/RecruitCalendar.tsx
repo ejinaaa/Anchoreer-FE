@@ -6,14 +6,19 @@ import {
   useRecruitsQuery,
 } from '../../hooks/recruit/useRecruitsQuery';
 import {
+  convertDateObjectToDateKey,
+  convertDateStringToDateKey,
   convertToDateObject,
   getDateObjectsOfMonth,
   isToday,
 } from '../../service/recruit';
 import { Month } from '../../types/common';
+import { Recruit } from '../../types/recruit';
 import { CalendarDateCell } from '../common/CalendarDateCell';
 import { CalendarNavigation } from '../common/CalendarNavigation';
 import { CalendarWeekdayCell } from '../common/CalendarWeekdayCell';
+import { RecruitListItem } from './RecruitListItem';
+import { RecruitListLayout } from './RecruitListLayout';
 
 export const RecruitCalendar = () => {
   const { data: recruitMapByDate } = useRecruitsQuery({
@@ -59,6 +64,11 @@ export const RecruitCalendar = () => {
     [selectedDate]
   );
 
+  const handleSeeDetail = (recruit: Recruit) => {
+    /** @todo open detail (kind of) modal */
+    console.log('recruit:', recruit);
+  };
+
   return (
     <Flex flexDir={'column'} align={'center'} gap={8} p={10}>
       <CalendarNavigation
@@ -82,6 +92,7 @@ export const RecruitCalendar = () => {
             />
           ))}
 
+          {/* @todo recruit list query loading, error 처리 */}
           {datesOfMonth.map((dateObject, itemIndex) => (
             <CalendarDateCell
               key={String(dateObject)}
@@ -90,7 +101,25 @@ export const RecruitCalendar = () => {
               isThisMonth={dateObject.month === selectedDate.month}
               isToday={isToday(dateObject)}
             >
-              {/* @todo recruit list */}
+              <RecruitListLayout minH={'full'}>
+                {recruitMapByDate?.[
+                  convertDateObjectToDateKey(dateObject)
+                ]?.map(recruit => (
+                  <RecruitListItem
+                    key={recruit.id}
+                    recruit={recruit}
+                    onSeeDetail={handleSeeDetail}
+                    isStart={
+                      convertDateStringToDateKey(recruit.start_time) ===
+                      convertDateObjectToDateKey(dateObject)
+                    }
+                    isEnd={
+                      convertDateStringToDateKey(recruit.end_time) ===
+                      convertDateObjectToDateKey(dateObject)
+                    }
+                  />
+                ))}
+              </RecruitListLayout>
             </CalendarDateCell>
           ))}
         </Grid>

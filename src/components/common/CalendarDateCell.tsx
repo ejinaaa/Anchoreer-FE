@@ -30,7 +30,9 @@ export const CalendarDateCell: React.FC<CalendarDateCellProps> = ({
         {date}
       </Center>
 
-      <Box minH={'100px'}>{children}</Box>
+      <Box minH={'100px'} fontSize={'xs'}>
+        {children}
+      </Box>
     </Box>
   );
 };
